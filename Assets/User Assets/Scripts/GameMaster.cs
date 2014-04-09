@@ -9,6 +9,9 @@ public class GameMaster : MonoBehaviour {
 	public GameObject User_Unit;
 	public GameObject Enemy_Unit;
 	public GameObject CloneUnit;
+	public GameObject UserSelector;
+	public GameObject EnemySelector;
+	public GameObject CloneUserSelector;
 
 	// Active Units - Targets
 	public GameObject ActivePlayerUnit;
@@ -20,8 +23,24 @@ public class GameMaster : MonoBehaviour {
 		string Name = "";
 		if (Army == PlayerUnits) {
 			Name += "Player_"; 
+			if (Slot == 0) {
+				Vector3 SelectorPos;
+				SelectorPos.x = 0;
+				SelectorPos.y = 0.001f;
+				SelectorPos.z = 0;
+				CloneUserSelector = (GameObject) Instantiate(UserSelector, SelectorPos, Quaternion.Euler(0, 0, 0)) as GameObject;
+				CloneUserSelector.name = "UserSelector";
+			}
 		} else {
 			Name += "Enemy_";
+			if (Slot == 0) {
+				Vector3 SelectorPos;
+				SelectorPos.x = 2.5f;
+				SelectorPos.y = 0.001f;
+				SelectorPos.z = 0;
+				CloneUserSelector = (GameObject) Instantiate(EnemySelector, SelectorPos, Quaternion.Euler(0, 0, 0)) as GameObject;
+				CloneUserSelector.name = "EnemySelector";
+			}
 		}
 		Name += "Unit_"+Slot.ToString();
 

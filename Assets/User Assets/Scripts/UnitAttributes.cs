@@ -26,8 +26,12 @@ public class UnitAttributes : MonoBehaviour {
 		//Set Active Unit
 		if (this.UnitType == "Player Unit") {
 			GameObject.Find("GameMaster").GetComponent<GameMaster>().ActivePlayerUnit = this.gameObject;
+			Vector3 ObjPos = this.transform.position;
+			GameObject.Find("UserSelector").transform.position = ObjPos;
 		} else {
 			GameObject.Find("GameMaster").GetComponent<GameMaster>().ActiveEnemyUnit = this.gameObject;
+			Vector3 ObjPos = this.transform.position;
+			GameObject.Find("EnemySelector").transform.position = ObjPos;
 		}
 	}
 	
