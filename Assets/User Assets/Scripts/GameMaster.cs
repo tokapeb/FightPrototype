@@ -77,6 +77,7 @@ public class GameMaster : MonoBehaviour {
 			_CCollider.radius = 0.12f;
 			_CCollider.center = ColliderPos;
 			Army.Add (CloneUnit);
+			ActivePlayerUnit = CloneUnit;
 		} else {
 			CloneUnit = (GameObject) Instantiate(Enemy_Unit, UnitPos, Quaternion.Euler(0, 270, 0)) as GameObject;
 			CloneUnit.name = Name;
@@ -87,11 +88,28 @@ public class GameMaster : MonoBehaviour {
 			_CCollider.radius = 0.12f;
 			_CCollider.center = ColliderPos;
 			Army.Add(CloneUnit);
+			ActiveEnemyUnit = CloneUnit;
 		}
+	}
+
+	public void SelectUnit(GameObject selected) {
+		if (selected.GetComponent<UnitAttributes> ().UnitType == "Player Unit") {
+			ActivePlayerUnit = selected;
+			Vector3 ObjPos = selected.transform.position;
+			GameObject.Find("UserSelector").transform.position = ObjPos;
+		} 
+		else {
+			ActiveEnemyUnit = selected;
+			Vector3 ObjPos = selected.transform.position;
+			GameObject.Find("EnemySelector").transform.position = ObjPos;
+		}
+
 	}
 
 	// Use this for initialization
 	void Start () {
+		AddUnit (PlayerUnits);
+		AddUnit (EnemyUnits);
 	
 	}
 	
