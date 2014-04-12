@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FullInspectorSerializerBinaryFormatter</name>
+    </assembly>
+    <members>
+        <member name="T:FullInspector.Serializers.Formatter.DictionarySurrogateSelector">
+            <summary>
+            Assists formatters in selection of the serialization surrogate to delegate the serialization
+            or deserialization process to.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Serializers.Formatter.DictionarySurrogateSelector.AddSurrogate(System.Type,System.Runtime.Serialization.StreamingContext,System.Runtime.Serialization.ISerializationSurrogate)">
+            <summary>
+            Adds a surrogate to the list of checked surrogates.
+            </summary>
+            <param name="type">The <see cref="T:System.Type"/> for which the surrogate is
+            required.</param>
+            <param name="context">The context-specific data.</param>
+            <param name="surrogate">The surrogate to call for this type.</param>
+            <exception cref="T:System.ArgumentNullException">The
+            <paramref name="type"/>or
+            <paramref name="surrogate"/>parameter is null.</exception>
+            <exception cref="T:System.ArgumentException">A surrogate already exists for this type
+            and context.</exception>
+        </member>
+        <member name="M:FullInspector.Serializers.Formatter.DictionarySurrogateSelector.ChainSelector(System.Runtime.Serialization.ISurrogateSelector)">
+            <summary>
+            Adds the specified <see cref="T:System.Runtime.Serialization.ISurrogateSelector"/> that
+            can handle a particular object type to the list of surrogates.
+            </summary>
+            <param name="selector">The surrogate selector to add.</param>
+            <exception cref="T:System.ArgumentNullException">The
+            <paramref name="selector"/>parameter is null.</exception>
+            <exception cref="T:System.Runtime.Serialization.SerializationException">The selector is
+            already on the list of selectors.</exception>
+            <exception cref="T:System.Security.SecurityException">The caller does not have the
+            required permission.</exception>
+        </member>
+        <member name="M:FullInspector.Serializers.Formatter.DictionarySurrogateSelector.GetNextSelector">
+             <summary>
+             Returns the next selector on the chain of selectors.
+             </summary>
+            
+             <returns>The next <see cref="T:System.Runtime.Serialization.ISurrogateSelector"/> on the
+             chain of selectors.</returns>
+             <exception cref="T:System.Security.SecurityException">The caller does not have the
+             required permission.</exception>
+        </member>
+        <member name="M:FullInspector.Serializers.Formatter.DictionarySurrogateSelector.GetSurrogate(System.Type,System.Runtime.Serialization.StreamingContext,System.Runtime.Serialization.ISurrogateSelector@)">
+             <summary>
+             Returns the surrogate for a particular type.
+             </summary>
+            
+             <returns>The surrogate for a particular type.</returns>
+             <param name="type">The <see cref="T:System.Type"/> for which the surrogate is
+             requested.</param>
+             <param name="context">The streaming context.</param>
+             <param name="selector">The surrogate to use.</param>
+             <exception cref="T:System.ArgumentNullException">The
+             <paramref name="type"/>parameter is null.</exception>
+             <exception cref="T:System.Security.SecurityException">The caller does not have the
+             required permission.</exception>
+             <PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="SerializationFormatter"/></PermissionSet>
+        </member>
+        <member name="M:FullInspector.Serializers.Formatter.DictionarySurrogateSelector.RemoveSurrogate(System.Type,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Removes the surrogate associated with a given type.
+            </summary>
+            <param name="type">The <see cref="T:System.Type"/> for which to remove the
+            surrogate.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/>
+            for the current surrogate.</param>
+            <exception cref="T:System.ArgumentNullException">The
+            <paramref name="type"/>parameter is null.</exception>
+        </member>
+        <member name="T:FullInspector.BinaryFormatterSerializer">
+            <summary>
+            Predefine the BinaryFormatterSerializer for convenience. This is just a FormatterSerialize
+            using a BinaryFormatter.
+            </summary>
+        </member>
+        <member name="T:FullInspector.FormatterSerializer`1">
+            <summary>
+            Provides Full Inspector integration for IFormatter serializer types. Typically the
+            IFormatter instance will be BinaryFormatter.
+            </summary>
+            <typeparam name="TFormatter">The type of IFormatter to use. Typically this will be
+            BinaryFormatter.</typeparam>
+        </member>
+        <member name="T:FullInspector.Serializers.Formatter.RobustSerializationBinder">
+            <summary>
+            A more robust deserialization binder that will match types even if they don't match the
+            assembly name.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FullInspectorSerializerJsonNet</name>
+    </assembly>
+    <members>
+        <member name="T:FullInspector.Serializers.JsonNet.ColorConverter">
+            <summary>
+            Converts UnityEngine.Color types
+            </summary>
+        </member>
+        <member name="T:FullInspector.Serializers.JsonNet.UnityObjectConverter">
+            <summary>
+            Converts all types that derive from UnityObject.
+            </summary>
+        </member>
+        <member name="F:FullInspector.JsonNetSerializer.RequiredConverters">
+            <summary>
+            The JsonConverters that we need to use for serialization to happen correctly.
+            </summary>
+        </member>
+        <member name="F:FullInspector.JsonNetSerializer.AllConverters">
+            <summary>
+            Every converter that will be used during (de)serialization.
+            </summary>
+        </member>
+        <member name="M:FullInspector.JsonNetSerializer.FormatError(Newtonsoft.Json.Serialization.ErrorContext)">
+            <summary>
+            Formats an ErrorContext for pretty printing.
+            </summary>
+        </member>
+        <member name="M:FullInspector.JsonNetSerializer.HandleError(System.Object,Newtonsoft.Json.Serialization.ErrorEventArgs)">
+            <summary>
+            Json.NET callback for when an error occurs. We simply print out the error and continue
+            with the deserialization process.
+            </summary>
+        </member>
+        <member name="F:FullInspector.JsonNetSerializer.Settings">
+            <summary>
+            The serialization settings that are used
+            </summary>
+        </member>
+        <member name="F:FullInspector.Serializers.JsonNet.JsonNetSettings.CustomConverters">
+            <summary>
+            Add any custom JsonConverters here.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Serializers.JsonNet.JsonNetSettings.RequireOptInAnnotation">
+            <summary>
+            Should [JsonObject(MemberSerialization.OptIn)] annotations (or a JsonConverter) be
+            required for all objects that are serialized?
+            </summary>
+        </member>
+    </members>
+</doc>

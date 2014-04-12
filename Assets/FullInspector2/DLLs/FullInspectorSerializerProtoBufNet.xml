@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FullInspectorSerializerProtoBufNet</name>
+    </assembly>
+    <members>
+        <member name="T:FullInspector.Serializers.ProtoBufNet.ProtoBufNetRecompiler">
+            <summary>
+            Detects when Unity is recompiling code. Before a recompile happens, we update the
+            precompiled protobuf-net DLL.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Serializers.ProtoBufNet.ProtoBufNetRecompiler._saved">
+            <summary>
+            True if we have detected a compile but have already recompiled. This is set to false by
+            Unity after a compilation has finished as it is not serialized and gets reset to the
+            default value.
+            </summary>
+        </member>
+        <member name="T:FullInspector.IProtoGenericInstantiator">
+            <summary>
+            This interface contains the methods necessary to instantiate a [ProtoGenericInstantiator]
+            type with the associated generic type parameters in the compiled protobuf type model.
+            </summary>
+        </member>
+        <member name="P:FullInspector.IProtoGenericInstantiator.GenericTypeArguments">
+            <summary>
+            Every generic type parameter that will be used in the generic ProtoContract type.
+            </summary>
+        </member>
+        <member name="F:FullInspector.ProtoBufNetSerializer._serializer">
+            <summary>
+            The serializer that we use for loading objects.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Serializers.ProtoBufNet.ProtoBufNetSettings">
+            <summary>
+            This type contains settings for protobuf-net.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Serializers.ProtoBufNet.ProtoBufNetSettings.PrecompiledSerializerTypeName">
+            <summary>
+            The type name of the precompiled serializer. The serializer will be compiled into a DLL
+            of the same name.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Serializers.ProtoBufNet.ProtoBufNetSettings.AutomaticDllRecompilation">
+            <summary>
+            Should the precompiled DLL be automatically recompiled whenever a code compilation is
+            detected?
+            </summary>
+        </member>
+        <member name="T:FullInspector.ProtoSurrogateAttribute">
+            <summary>
+            Marks the annotated type as a surrogate for another type.
+            </summary>
+        </member>
+        <member name="F:FullInspector.ProtoSurrogateAttribute.SurrogateFor">
+            <summary>
+            The type that this annotated type is a surrogate for.
+            </summary>
+        </member>
+        <member name="M:FullInspector.ProtoSurrogateAttribute.#ctor(System.Type)">
+            <summary>
+            Marks this type as a surrogate for another non-generic type.
+            </summary>
+            <param name="surrogateFor">The type that this type acts as a protobuf surrogate
+            for.</param>
+        </member>
+        <member name="T:FullInspector.Serializers.ProtoBufNet.TypeModelCreator">
+            <summary>
+            Manages the dynamic construction of a protobuf-net TypeModel that is used for serialization.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Serializers.ProtoBufNet.TypeModelCreator.GetNonGenericSurrogates">
+            <summary>
+            Non-generic surrogate types are a surrogate for non-generic types
+            </summary>
+        </member>
+        <member name="M:FullInspector.Serializers.ProtoBufNet.TypeModelCreator.GetContracts">
+            <summary>
+            Types which have a [ProtoContract] attribute but not a [ProtoSurrogate] attribute
+            </summary>
+        </member>
+        <member name="M:FullInspector.Serializers.ProtoBufNet.TypeModelCreator.ContainsType(ProtoBuf.Meta.RuntimeTypeModel,System.Type)">
+            <summary>
+            Returns true if the given RuntimeTypeModel contains a definition for the given type.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Serializers.ProtoBufNet.TypeModelCreator.Throw(System.String,System.Object[])">
+            <summary>
+            Throws an InvalidOperationException.
+            </summary>
+            <param name="format">The format string.</param>
+            <param name="parameters">The parameters in the format string.</param>
+        </member>
+        <member name="F:FullInspector.Serializers.ProtoBufNet.TypeModelCreator.NonGenericSurrogate.ModeledType">
+            <summary>
+            The type that is being modeled by the surrogate.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Serializers.ProtoBufNet.TypeModelCreator.NonGenericSurrogate.SurrogateType">
+            <summary>
+            The surrogate type that is being used to serialize the model type.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Serializers.ProtoBufNet.TypeModelCreator.GenericSurrogate.GenericModeledType">
+            <summary>
+            The type that is being modeled by the surrogate.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Serializers.ProtoBufNet.TypeModelCreator.GenericSurrogate.GenericSurrogateType">
+            <summary>
+            The surrogate type that is being used to serialize the model type.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Serializers.ProtoBufNet.TypeModelCreator.GenericSurrogate.TypeArguments">
+            <summary>
+            The type parameters to instantiate GenericModeledType and GenericSurrogateType with.
+            </summary>
+        </member>
+    </members>
+</doc>

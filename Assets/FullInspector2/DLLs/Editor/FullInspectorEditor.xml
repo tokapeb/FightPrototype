@@ -1,0 +1,898 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FullInspectorEditor</name>
+    </assembly>
+    <members>
+        <member name="T:FullInspector.Internal.CommentUtils">
+            <summary>
+            Contains some utility functions that are useful when drawing the GUI for CommentAttributes.
+            </summary>
+        </member>
+        <member name="T:FullInspector.FullInspectorCommonSerializedObjectEditor">
+            <summary>
+            An editor that provides a good inspector experience for types which derive from
+            ISerializedObject.
+            </summary>
+        </member>
+        <member name="F:FullInspector.FullInspectorCommonSerializedObjectEditor._editorShowSerializedState">
+            <summary>
+            This is accessed by the BaseBehaviorEditor (using reflection) to determine if the editor
+            should show the value for _serializedState.
+            </summary>
+        </member>
+        <member name="M:FullInspector.FullInspectorCommonSerializedObjectEditor.EnsureRestored(FullInspector.ISerializedObject)">
+            <summary>
+            Ensures that the given behavior has been restored so that it can be edited with the
+            proper data populated. This also verifies that the object is displaying the most recent
+            prefab data.
+            </summary>
+        </member>
+        <member name="T:FullInspector.CustomAttributePropertyEditorAttribute">
+            <summary>
+            Allows an IPropertyEditor to be used as an attribute property editor.
+            </summary>
+        </member>
+        <member name="F:FullInspector.CustomAttributePropertyEditorAttribute.AttributeActivator">
+            <summary>
+            The attribute type that activates this property editor.
+            </summary>
+        </member>
+        <member name="F:FullInspector.CustomAttributePropertyEditorAttribute.ReplaceOthers">
+            <summary>
+            If true, then this attribute property editor will replace other property editors beneath
+            it.
+            </summary>
+        </member>
+        <member name="M:FullInspector.CustomAttributePropertyEditorAttribute.#ctor(System.Type)">
+            <summary>
+            Construct a new attribute instance.
+            </summary>
+            <param name="attributeActivator">The attribute type that activates this property
+            editor.</param>
+        </member>
+        <member name="M:FullInspector.CustomAttributePropertyEditorAttribute.#ctor(System.Type,System.Boolean)">
+            <summary>
+            Construct a new attribute instance.
+            </summary>
+            <param name="attributeActivator">The attribute type that activates this property
+            editor.</param>
+            <param name="replaceOthers">If true, then this attribute property editor will replace
+            other property editors beneath it.</param>
+        </member>
+        <member name="T:FullInspector.CustomPropertyEditorAttribute">
+            <summary>
+            An annotation that signals that a class is a property editor for a given property type.
+            </summary>
+            <remarks>
+            If the property editor is editing a generic type, then PropertyType should just be an open
+            generic type reflecting the edited type. For example, for a List property editor,
+            PropertyType should be typeof(List{}) (where {} are angle brackets).
+            </remarks>
+        </member>
+        <member name="F:FullInspector.CustomPropertyEditorAttribute.PropertyType">
+            <summary>
+            The type of property that this class is a property editor for. This can be either a
+            non-generic type or an open generic type (List{} is an open generic type, but List[int]
+            is not).
+            </summary>
+        </member>
+        <member name="F:FullInspector.CustomPropertyEditorAttribute.Inherit">
+            <summary>
+            Should this editor type be used for inherited PropertyTypes? If Inherit is true, then
+            the first generic parameter of your property editor type will be automatically populated
+            with the derived type that the property editor is being used to edit.
+            </summary>
+        </member>
+        <member name="M:FullInspector.CustomPropertyEditorAttribute.#ctor(System.Type)">
+            <summary>
+            Mark this type as an IPropertyEditor. It will be instantiated automatically.
+            </summary>
+            <param name="propertyType">The type of property that this PropertyEditor is
+            editing.</param>
+        </member>
+        <member name="M:FullInspector.CustomPropertyEditorAttribute.#ctor(System.Type,System.Boolean)">
+            <summary>
+            Mark this type as an IPropertyEditor. It will be instantiated automatically.
+            </summary>
+            <param name="propertyType">The type of property that this PropertyEditor is
+            editing.</param>
+            <param name="inherit">If true, then this PropertyEditor will also be used for types that
+            derive from propertyType. If true, then this also has implications on the generic
+            parameter list. See the documentation on the member variable for more
+            information.</param>
+        </member>
+        <member name="M:FullInspector.Internal.DisplayNameMapper.Map(System.String)">
+            <summary>
+            Convert the given property name into a name that will be used for the Unity inspector.
+            For example, Unity by default converts "fieldValue" into "Field Value".
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.FullInspectorEditorUtils.TryGetMonoScript(System.Object,UnityEditor.MonoScript@)">
+            <summary>
+            Attempts to fetch a MonoScript that is associated with the given obj.
+            </summary>
+            <param name="obj">The object to fetch the script for.</param>
+            <param name="script">The script, if found.</param>
+            <returns>True if there was a script, false otherwise.</returns>
+        </member>
+        <member name="M:FullInspector.Internal.FullInspectorEditorUtils.HasMonoScript(System.Object)">
+            <summary>
+            Returns true if the given obj has a MonoScript associated with it.
+            </summary>
+        </member>
+        <member name="T:FullInspector.IPropertyEditor">
+            <summary>
+            Marks an object as a property editor. You're going to probably want to extend
+            PropertyEditor[T] instead of this interface, as it provides a type-safe interface.
+            </summary>
+        </member>
+        <member name="M:FullInspector.IPropertyEditor.Edit(UnityEngine.Rect,UnityEngine.GUIContent,System.Object)">
+            <summary>
+            Edit the given element.
+            </summary>
+            <param name="region">The rect on the screen to draw the GUI controls.</param>
+            <param name="label">The label to label the controls with.</param>
+            <param name="element">The element itself to edit. This can be mutated directly. For
+            values which cannot be mutated, such as structs, the return value is used to update the
+            stored value.</param>
+            <returns>An updated instance of the element.</returns>
+        </member>
+        <member name="M:FullInspector.IPropertyEditor.GetElementHeight(UnityEngine.GUIContent,System.Object)">
+            <summary>
+            Returns the height of the region that needs editing.
+            </summary>
+            <param name="label">The label that will be used when editing.</param>
+            <param name="element">The element that will be edited.</param>
+            <returns>The height of the region that needs editing.</returns>
+        </member>
+        <member name="M:FullInspector.IPropertyEditor.GetFoldoutHeader(UnityEngine.GUIContent,System.Object)">
+            <summary>
+            Returns a header that should be used for the foldout.
+            </summary>
+            <param name="label">The current foldout label.</param>
+            <param name="element">The current object element.</param>
+            <returns>An updated label.</returns>
+        </member>
+        <member name="M:FullInspector.IPropertyEditor.OnSceneGUI(System.Object)">
+            <summary>
+            Draw an optional scene GUI.
+            </summary>
+        </member>
+        <member name="M:FullInspector.IPropertyEditor.CanEdit(System.Type)">
+            <summary>
+            Can the editor edit the given type?
+            </summary>
+        </member>
+        <member name="T:FullInspector.PropertyEditor`1">
+            <summary>
+            A class that makes extending IPropertyEditor easier.
+            </summary>
+            <remarks>
+            This class is automatically discovered and injected in the data rendering process. No
+            explicit registration of the type is necessary.
+            </remarks>
+            <typeparam name="TElement">The element type that the data editor will edit</typeparam>
+        </member>
+        <member name="M:FullInspector.PropertyEditor`1.Edit(UnityEngine.Rect,UnityEngine.GUIContent,`0)">
+            <summary>
+            Edit the given element.
+            </summary>
+            <param name="region">The rect on the screen to draw the GUI controls.</param>
+            <param name="label">The label to label the controls with.</param>
+            <param name="element">The element itself to edit. This can be mutated directly. For
+            values which cannot be mutated, such as structs, the return value is used to update the
+            stored value.</param>
+            <returns>An updated instance of the element.</returns>
+        </member>
+        <member name="M:FullInspector.PropertyEditor`1.GetElementHeight(UnityEngine.GUIContent,`0)">
+            <summary>
+            Returns the height of the region that needs editing.
+            </summary>
+            <param name="label">The label that will be used when editing.</param>
+            <param name="element">The element that will be edited.</param>
+            <returns>The height of the region that needs editing.</returns>
+        </member>
+        <member name="M:FullInspector.PropertyEditor`1.OnSceneGUI(`0)">
+            <summary>
+            Draw an optional scene GUI.
+            </summary>
+        </member>
+        <member name="M:FullInspector.PropertyEditor`1.GetFoldoutHeader(UnityEngine.GUIContent,System.Object)">
+            <summary>
+            Returns a header that should be used for the foldout.
+            </summary>
+            <param name="label">The current foldout label.</param>
+            <param name="element">The current object element.</param>
+            <returns>An updated label.</returns>
+            <remarks>
+            By default, this method just returns the label unmodified.
+            </remarks>
+        </member>
+        <member name="M:FullInspector.PropertyEditor`1.CanEdit(System.Type)">
+            <summary>
+            Can the editor edit the given type?
+            </summary>
+        </member>
+        <member name="M:FullInspector.AttributePropertyEditor`2.OnSceneGUI(`0,`1)">
+            <summary>
+            Draw an optional scene GUI.
+            </summary>
+        </member>
+        <member name="M:FullInspector.AttributePropertyEditor`2.GetFoldoutHeader(UnityEngine.GUIContent,System.Object)">
+            <summary>
+            Returns a header that should be used for the foldout.
+            </summary>
+            <param name="label">The current foldout label.</param>
+            <param name="element">The current object element.</param>
+            <returns>An updated label.</returns>
+            <remarks>
+            By default, this method just returns the label unmodified.
+            </remarks>
+        </member>
+        <member name="M:FullInspector.AttributePropertyEditor`2.CanEdit(System.Type)">
+            <summary>
+            Can the editor edit the given type?
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.ObjectModificationDetector">
+            <summary>
+            A helper class that identifies when an ISerializedObject has been modified for some reason.
+            </summary>
+            <remarks>
+            To determine if the object state has changed, this hashes the serialized state of the
+            object. If the hash of the serialized state has changed, then the object has been modified.
+            </remarks>
+        </member>
+        <member name="M:FullInspector.Internal.ObjectModificationDetector.GetHash(FullInspector.ISerializedObject)">
+            <summary>
+            Computes a hash code for the given serialized object.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ObjectModificationDetector.Update(FullInspector.ISerializedObject)">
+            <summary>
+            Update the stored serialized state of the given object.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ObjectModificationDetector.WasModified(FullInspector.ISerializedObject)">
+            <summary>
+            Returns true if the given object has been modified since its last update.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.CompilationDetector">
+            <summary>
+            Detects when Unity is recompiling code. Before a recompile happens, all state is saved and
+            after the recompilation is finished all state is restored.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.CompilationDetector._saved">
+            <summary>
+            True if we have detected a compile but have already saved. This is set to false by Unity
+            after a compilation has finished.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.CompilationDetector._restored">
+            <summary>
+            True if everything has been restored. This is set to false by Unity after a compilation
+            / reload has occurred.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.PlayModeDetector">
+            <summary>
+            Detects when the editor has entered or left play mode or has paused.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.PlayModeDetector._lastPlaying">
+            <summary>
+            The last playing state
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.PlayModeDetector._lastPaused">
+            <summary>
+            The last paused state
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.PlayModeDetector.OnTransition(FullInspector.Internal.PlayModeDetector.EditorTransition)">
+            <summary>
+            This function is called when the editor is undergoing a play mode related transition.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.PlayModeDetector.EditorTransition">
+            <summary>
+            A transition that the editor can go through.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.PlayModeDetector.EditorTransition.PreIntoPlay">
+            <summary>
+            The editor is about to enter play mode but has yet to go through Unity
+            serialization.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.PlayModeDetector.EditorTransition.PostIntoPlay">
+            <summary>
+            The editor is about to enter play mode and has just gone through Unity
+            serialization.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.PlayModeDetector.EditorTransition.PostOutPlay">
+            <summary>
+            The editor is leaving play mode and has just gone through Unity serialization.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.PlayModeDetector.EditorTransition.IntoPause">
+            <summary>
+            The editor is about to enter pause mode
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.PlayModeDetector.EditorTransition.OutPause">
+            <summary>
+            The editor is about to leave pause mode
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.SceneSaveProcessor">
+            <summary>
+            This processor saves the state of any unsaved BaseBehavior instances when the scene has been
+            saved. This type isn't necessary as the BaseBehaviorEditor manages saving everything, but it
+            provides some extra data protection.
+            </summary>
+        </member>
+        <member name="T:FullInspector.PropertyEditor">
+            <summary>
+            Manages the discovery of PropertyEditor class instances.
+            </summary>
+        </member>
+        <member name="F:FullInspector.PropertyEditor._editorTypes">
+            <summary>
+            A list of all types that have a CustomPropertyEditorAttribute attribute.
+            </summary>
+        </member>
+        <member name="F:FullInspector.PropertyEditor._cachedPropertyEditors">
+            <summary>
+            Cached property editors.
+            </summary>
+        </member>
+        <member name="M:FullInspector.PropertyEditor.GetCachedEditors(System.Type,System.Reflection.ICustomAttributeProvider)">
+            <summary>
+            Returns a set of property editors that can be used to edit the given property type.
+            </summary>
+        </member>
+        <member name="M:FullInspector.PropertyEditor.Get(System.Type,System.Reflection.ICustomAttributeProvider,System.Type[])">
+            <summary>
+            Returns an IPropertyEditor that can edit the given type. This will not return any
+            property editors that are created from a type contained in bannedPropertyEditorTypes.
+            </summary>
+            <param name="propertyType">The type that an IPropertyEditor should be fetched
+            for.</param>
+            <param name="editedAttributes">Provides attributes that may override the default
+            property editor. This parameter can safely be set to null.</param>
+            <param name="bannedPropertyEditorTypes">A list of types which will not be used to
+            derived propertyType from.</param>
+            <returns>An IPropertyEditor that can be used to edit the given propertyType.</returns>
+        </member>
+        <member name="M:FullInspector.PropertyEditor.Get(System.Type,System.Reflection.ICustomAttributeProvider)">
+            <summary>
+            Returns an IPropertyEditor that can edit the given type.
+            </summary>
+            <param name="propertyType">The type of property/field that is being edited.</param>
+            <param name="editedAttributes">Provides attributes that may override the default
+            property editor. This parameter can safely be set to null.</param>
+        </member>
+        <member name="F:FullInspector.PropertyEditor.CachedType.EditedType">
+            <summary>
+            The type of the edited object.
+            </summary>
+        </member>
+        <member name="F:FullInspector.PropertyEditor.CachedType.EditedAttributes">
+            <summary>
+            The attributes associated with the edited type.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.CollectionAdaptor`1">
+            <summary>
+            Reorderable list adapter for ICollection types
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.CollectionAdaptor`1._height">
+            <summary>
+            Returns the height of the given element.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.CollectionAdaptor`1._drawer">
+            <summary>
+            Provides an editor for the given element.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.CollectionAdaptor`1._collection">
+            <summary>
+            Stores all of the elements
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.NumericTypeEditorHelper">
+            <summary>
+            Provides an Edit field that uses a string so that types of varying bit width (greater than
+            32 bits, which is what IntField/FloatField is limited to) can be represented properly in the
+            editor without losing data.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.NumericTypeEditorHelper.Edit``1(UnityEngine.Rect,UnityEngine.GUIContent,``0)">
+            <summary>
+            Edit the given type using a TextField. Convert.ChangeType will be used to convert the
+            given type T to and from a string.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.DictionaryAdapter`2">
+            <summary>
+            Reorderable list adapter for generic collections.
+            </summary>
+            <remarks>
+            <para>This adapter can be subclassed to add special logic to item height calculation. You
+            may want to implement a custom adapter class where specialized functionality is
+            needed.</para>
+            </remarks>
+        </member>
+        <member name="M:FullInspector.Internal.DictionaryAdapter`2.#ctor(System.Collections.Generic.IDictionary{`0,`1},FullInspector.Rotorz.ReorderableList.ReorderableListControl.ItemDrawer{`0},FullInspector.Rotorz.ReorderableList.ReorderableListControl.ItemDrawer{`1},System.Func{System.Collections.Generic.KeyValuePair{`0,`1},System.Single},System.Func{System.Collections.Generic.KeyValuePair{`0,`1}})">
+            <summary>
+            Initializes a new instance of DictionaryAdapter.
+            </summary>
+            <param name="dictionary">The dictionary that will be adapter for Rotorz</param>
+            <param name="keyDrawer">The function that will edit keys in the dictionary</param>
+            <param name="valueDrawer">The function that will edit values in the dictionary</param>
+            <param name="itemHeight">The function that computes the height of dictionary
+            items</param>
+            <param name="itemGenerator">The function used to generate new items. If null, then the
+            default item generator is used</param>
+        </member>
+        <member name="T:FullInspector.Internal.GenericListAdaptorWithDynamicHeight`1">
+            <summary>
+            Reorderable list adapter for generic list.
+            </summary>
+            <remarks>
+            <para>This adapter can be subclassed to add special logic to item height calculation. You
+            may want to implement a custom adapter class where specialized functionality is
+            needed.</para>
+            </remarks>
+        </member>
+        <member name="M:FullInspector.Internal.GenericListAdaptorWithDynamicHeight`1.#ctor(System.Collections.Generic.IList{`0},FullInspector.Rotorz.ReorderableList.ReorderableListControl.ItemDrawer{`0},System.Func{`0,System.Single},System.Func{`0})">
+            <summary>
+            Initializes a new instance of <see cref="T:FullInspector.Rotorz.ReorderableList.GenericListAdaptor`1"/>.
+            </summary>
+            <param name="list">The list which can be reordered.</param>
+            <param name="itemDrawer">Callback to draw list item.</param>
+            <param name="itemHeight">Height of list item in pixels.</param>
+            <param name="itemGenerator">The function used to generate new items. If null, then the
+            default item generator is used.</param>
+        </member>
+        <member name="T:FullInspector.Internal.ICollectionPropertyEditor`2">
+            <summary>
+            Provides a property editor for all types which derive from ICollection{T}.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.ICollectionPropertyEditor`2.TEditor">
+            <summary>
+            The editor that is used for editing instances of type T.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.ICollectionPropertyEditor`2._nextValue">
+            <summary>
+            The current value for the next item that we will insert into the collection. We show a
+            custom property editor for this value below the list GUI.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ICollectionPropertyEditor`2.GetBottomHeight">
+            <summary>
+            Returns the height of the bottom element of the dictionary property editor. More
+            precisely, the bottom element is the "Add Key" button and the "Add Key" property
+            inspector.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ICollectionPropertyEditor`2.SplitRectAbsolute(UnityEngine.Rect,System.Single,System.Single,UnityEngine.Rect@,UnityEngine.Rect@)">
+            <summary>
+            Splits the given rect into two rects that are divided horizontally.
+            </summary>
+            <param name="rect">The rect to split</param>
+            <param name="leftWidth">The horizontal size of the left rect</param>
+            <param name="margin">How much space that should be between the two rects</param>
+            <param name="left">The output left-hand side rect</param>
+            <param name="right">The output right-hand side rect</param>
+        </member>
+        <member name="M:FullInspector.Internal.ICollectionPropertyEditor`2.DrawEmpty(UnityEngine.Rect)">
+            <summary>
+            Callback that draws an empty dictionary.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ICollectionPropertyEditor`2.DrawItem(UnityEngine.Rect,`1)">
+            <summary>
+            Callback from Rotorz that draws an item in the collection.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ICollectionPropertyEditor`2.GetItemHeight(`1)">
+            <summary>
+            Callback from Rotorz that returns the height of an item in the collection.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ICollectionPropertyEditor`2.GetAdapter(System.Collections.Generic.ICollection{`1})">
+            <summary>
+            Gets a reorderable list adapter for a dictionary. The implementation is somewhat hacky
+            and slow, but it works.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ICollectionPropertyEditor`2.EnsureValueDefaults(`1@)">
+            <summary>
+            Ensures that the given value has a valid default value. Some collection types dislike
+            null strings, for example.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ICollectionPropertyEditor`2.EnsureNotNull(System.Collections.Generic.ICollection{`1}@)">
+            <summary>
+            Ensures that the given collection reference is not null. If it is currently null, then a
+            value is constructed and stored inside of the reference.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.IDictionaryPropertyEditor`3">
+            <summary>
+            The base dictionary property editor provides common code for editing dictionaries. To enable
+            support for editing an IDictionary type, all one needs to do is extend this class with the
+            appropriate type parameters filled in.
+            </summary>
+            <typeparam name="TDictionary">The dictionary type (must extend IDictionary[TKey,
+            TValue])</typeparam> <typeparam name="TKey">The key type stored in the
+            dictionary.</typeparam> <typeparam name="TValue">The value type stored in the
+            dictionary.</typeparam>
+        </member>
+        <member name="F:FullInspector.Internal.IDictionaryPropertyEditor`3.ListKeyAddMargin">
+            <summary>
+            The margin between the end of the list and the add key button.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.IDictionaryPropertyEditor`3.ListKeyEndMargin">
+            <summary>
+            The amount of space at the after the add key region.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.IDictionaryPropertyEditor`3.KeyEditor">
+            <summary>
+            The key editor that we use for editing key values.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.IDictionaryPropertyEditor`3.ValueEditor">
+            <summary>
+            The value editor that we use for editing values.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.IDictionaryPropertyEditor`3._nextKey">
+            <summary>
+            The current value for the next key that we will insert into the dictionary. We show a
+            custom property editor for this value below the list GUI.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.IDictionaryPropertyEditor`3.DrawKey(UnityEngine.Rect,`1)">
+            <summary>
+            Draws a key in the dictionary's KeyValuePair.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.IDictionaryPropertyEditor`3.DrawValue(UnityEngine.Rect,`2)">
+            <summary>
+            Draws a value in the dictionary's KeyValuePair.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.IDictionaryPropertyEditor`3.SplitRect(UnityEngine.Rect,System.Single,System.Single,UnityEngine.Rect@,UnityEngine.Rect@)">
+            <summary>
+            Splits the given rect into two rects that are divided horizontally.
+            </summary>
+            <param name="rect">The rect to split</param>
+            <param name="percentage">The horizontal percentage that the rects are split at</param>
+            <param name="margin">How much space that should be between the two rects</param>
+            <param name="left">The output left-hand side rect</param>
+            <param name="right">The output right-hand side rect</param>
+        </member>
+        <member name="M:FullInspector.Internal.IDictionaryPropertyEditor`3.SplitRectAbsolute(UnityEngine.Rect,System.Single,System.Single,UnityEngine.Rect@,UnityEngine.Rect@)">
+            <summary>
+            Splits the given rect into two rects that are divided horizontally.
+            </summary>
+            <param name="rect">The rect to split</param>
+            <param name="leftWidth">The horizontal size of the left rect</param>
+            <param name="margin">How much space that should be between the two rects</param>
+            <param name="left">The output left-hand side rect</param>
+            <param name="right">The output right-hand side rect</param>
+        </member>
+        <member name="M:FullInspector.Internal.IDictionaryPropertyEditor`3.GetAdapter(System.Collections.Generic.IDictionary{`1,`2})">
+            <summary>
+            Gets a reorderable list adapter for a dictionary. The implementation is somewhat hacky
+            and slow, but it works.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.IDictionaryPropertyEditor`3.DrawEmpty(UnityEngine.Rect)">
+            <summary>
+            Draws an empty dictionary.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.IDictionaryPropertyEditor`3.GetItemHeight(System.Collections.Generic.KeyValuePair{`1,`2})">
+            <summary>
+            Returns the height of an individual item in the dictionary list.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.IDictionaryPropertyEditor`3.EnsureKeyDefaults(`1@)">
+            <summary>
+            Ensures that the given key has a valid default value. Dictionaries don't like null
+            strings.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.IDictionaryPropertyEditor`3.GetBottomHeight">
+            <summary>
+            Returns the height of the bottom element of the dictionary property editor. More
+            precisely, the bottom element is the "Add Key" button and the "Add Key" property
+            inspector.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.IListPropertyEditor`2">
+            <summary>
+            Convenience class that wraps other IPropertyEditors and allows them to be List[T] to be
+            edited as a reorderable list.
+            </summary>
+            <remarks>
+            This uses the open type property editor injection system to automatically inject itself for
+            those ElementTypes which have PropertyEditors.
+            </remarks>
+        </member>
+        <member name="T:FullInspector.Internal.IObjectPropertyEditor">
+            <summary>
+            Used to remove the generic arguments from ObjectPropertyEditor so that it can be used as a
+            "banned" argument for PropertyEditor.Get
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.ObjectPropertyEditor`1">
+            <summary>
+            Provides an ObjectField for every type which derives from Object.
+            </summary>
+            <typeparam name="ObjectType">The actual type of the derived parameter</typeparam>
+        </member>
+        <member name="T:FullInspector.Internal.AbstractTypePropertyEditor">
+            <summary>
+            Provides a property editor for types which cannot be instantiated directly and require the
+            user to select a specific instance to instantiate.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.ArrayListAdaptor`1">
+            <summary>
+            Reorderable list adapter for arrays.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.ArrayPropertyEditor`1">
+            <summary>
+            Provides a property editor for arrays, or a type T[].
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.AttributePropertyEditor._attributeEditorMappings">
+            <summary>
+            A map of attribute type to the IPropertyEditor type that is associated with that
+            attribute (via the CustomAttributePropertyEditorAttribute annotation).
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.AttributePropertyEditor._attributeReplaceMappings">
+            <summary>
+            A map of attribute type to if that property editor should replace all other editors
+            after it.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.EnumPropertyEditor">
+            <summary>
+            Provides a property editor for enums.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.ReflectedPropertyEditor">
+            <summary>
+            The general property editor that takes over when there is no specific override. This uses
+            reflection to discover what values to edit.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.ReflectedPropertyEditor.TitleHeight">
+            <summary>
+            How tall the label element should be.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.ReflectedPropertyEditor.DividerHeight">
+            <summary>
+            How much space is between each element.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.ReflectedPropertyEditor.MinimumFoldoutHeight">
+            <summary>
+            The minimum height a child property editor has to be before a foldout is displayed
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.ReflectedPropertyEditor.ScriptButtonHeight">
+            <summary>
+            The height of "Open Script" button
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectedPropertyEditor.HasLabel(UnityEngine.GUIContent)">
+            <summary>
+            Returns true if the given GUIContent element contains any content.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectedPropertyEditor.DrawLabel(UnityEngine.Rect,UnityEngine.GUIContent)">
+            <summary>
+            Draws a label at the given region. Returns an indented rectangle that can be used for
+            drawing properties directly under the label.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectedPropertyEditor.ShowProperty(FullInspector.Internal.PropertyMetadata)">
+            <summary>
+            Returns true if the given property should be displayed in the inspector.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectedPropertyEditor.CanShowFoldout(System.Type)">
+            <summary>
+            Currently, until the metadata storage system is rewritten, we only show foldouts for
+            classes and interfaces.
+            </summary>
+            <remarks>
+            Structs are not supported because the metadata storage solution does not currently
+            support them.
+            </remarks>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectedPropertyEditor.ContainsPropertyName(System.String,System.String)">
+            <summary>
+            Returns true if the period separate property path contains the given property name.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectedPropertyEditor.TryExtractPropertyName(FullInspector.ISerializedObject,UnityEditor.PropertyModification,System.String@)">
+            <summary>
+            Attempts to extract the name of serialized key for the given property modification.
+            </summary>
+            <param name="obj">The object that that modification is applied to.</param>
+            <param name="mod">The modification.</param>
+            <param name="keyName">An output parameter containing the name of the key that the
+            modification maps to.</param>
+            <returns>True if the key was found, false otherwise.</returns>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectedPropertyEditor.EditProperties(UnityEngine.Rect,System.Object)">
+            <summary>
+            Draws the actual property editors.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectedPropertyEditor.GetOpenScriptButtonHeight(System.Object)">
+            <summary>
+            Returns the height of the element that opens up the script. If the element is not
+            displayed for any reason, then this method returns 0.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectedPropertyEditor.ShowOpenScriptButton(UnityEngine.Rect,System.Object)">
+            <summary>
+            Draws the element that opens up the script associated with the given element. If the
+            editor element should not be shown, then this method does not do anything.
+            </summary>
+            <returns>A rect containing the still usable parts of region</returns>
+        </member>
+        <member name="T:FullInspector.Internal.ReflectedPropertyEditor.ObjectMap`1">
+            <summary>
+            Returns an associated object for another object.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.ReflectedPropertyEditor.StateObject">
+            <summary>
+            Metadata we store on edited objects to determine if we should show a foldout. This
+            object instance is fetched using ObjectMap{StateObject}.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.PropertyEditorTools.CanEdit(System.Type,FullInspector.CustomPropertyEditorAttribute)">
+            <summary>
+            Returns true if the given dataType matches the given propertyType. If the dataType is
+            generic and the propertyType is a generic definition, then the propertyType will be
+            instantiated with the same generic arguments as dataType.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.PropertyEditorTools.TryCreateInstance(System.Type,System.Type,System.Type,FullInspector.IPropertyEditor@)">
+            <summary>
+            Creates a new instance of the given editorType. It is assumed that editorType extends
+            IPropertyEditor.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.PropertyEditorTools.TryCreateSpecificEditor(System.Type,System.Type,System.Type)">
+            <summary>
+            Attempt to create a new IPropertyEditor instance.
+            </summary>
+            <param name="usedEditedType">The data type that is used for comparison with the property
+            editor.</param>
+            <param name="actualEditedType">The actual data type that that usedEditedType was derived
+            from.</param>
+            <param name="editorType">The type of editor we are trying to create.</param>
+            <returns></returns>
+        </member>
+        <member name="M:FullInspector.Internal.PropertyEditorTools.TryCreateEditor(System.Type,System.Type)">
+            <summary>
+            Attempts to create a property editor for the given edited data type from the given
+            editor type.
+            </summary>
+            <param name="editedType">The type that is being edited.</param>
+            <param name="editorType">The editor type.</param>
+            <returns>A property editor that can edit the given edited type.</returns>
+        </member>
+        <member name="F:FullInspector.Internal.ReflectionUtilities._creatableTypeCache">
+            <summary>
+            A cache of all types that derive the key type in the AppDomain. The cache is
+            automatically destroyed upon assembly loads.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectionUtilities.GetCreatableTypesDeriving(System.Type)">
+            <summary>
+            Returns all types that derive from the base type. This includes generic type
+            definitions, which when returned will have appropriate constructor values injected.
+            </summary>
+            <param name="baseType">The base parent type.</param>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectionUtilities.GetIndexOfName(System.Type[],System.String)">
+            <summary>
+            Helper method to return the index of the Type in the array that has the given Name (or
+            - 1 if the item is not in the array).
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectionUtilities.SelectBestTypeParameters(System.Collections.Generic.List{FullInspector.Internal.ReflectionUtilities.GenericParameterCandidate},System.Type)">
+            <summary>
+            Orders the given types parameter array so that the order most closely matches the given
+            genericArguments array
+            </summary>
+            <param name="candidateTypes">The types that have been collected as potential candidates
+            for generic parameter arguments</param>
+            <param name="openGenericType">The type that we are going to use the candidateTypes for
+            constructing a closed generic type on</param>
+            <returns>An array of types that can (hopefully) be used to construct a closed generic
+            type from the given openGenericType.</returns>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectionUtilities.TryConstructAssignableGenericType(System.Type,System.Type,System.Type,System.Type[],System.Type@)">
+            <summary>
+            Attempts to create an instance of openGenericType such that it is can be assigned to
+            baseType.
+            </summary>
+            <param name="openGenericType">An open generic type that derives baseType</param>
+            <param name="baseType">A generic type with fully populated type parameters.</param>
+            <param name="baseTypeGenericDefinition">Just baseType.GetGenericTypeDefinition()</param>
+            <param name="baseTypeGenericArguments">Just baseType.GetGenericArguments()</param>
+            <param name="constructedType">If this function returns true, then this value is set to
+            the created type that is assignable to baseType and an instance of
+            openGenericType.</param>
+            <returns>True if a type was constructed, false otherwise.</returns>
+        </member>
+        <member name="M:FullInspector.Internal.ReflectionUtilities.GetExactImplementation(System.Type,System.Type)">
+            <summary>
+            Searches for a particular implementation of the given parent type inside of the type.
+            This is particularly useful if the interface type is an open type, ie, typeof(IFace{}),
+            because this method will then return IFace{} but with appropriate type parameters
+            inserted.
+            </summary>
+            <param name="type">The base type to search for interface</param>
+            <param name="parentType">The parent type to search for. Can be an open generic
+            type.</param>
+            <returns>The actual interface type that the type contains, or null if there is no
+            implementation of the given interfaceType on type.</returns>
+        </member>
+        <member name="T:FullInspector.Internal.ReflectionUtilities.GenericParameterCandidate">
+            <summary>
+            A candidate type that can potentially be used as a generic parameter argument.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.ReflectionUtilities.GenericParameterCandidate.Type">
+            <summary>
+            The actual type that will be the generic parameter.
+            </summary>
+        </member>
+        <member name="F:FullInspector.Internal.ReflectionUtilities.GenericParameterCandidate.SourceParameterName">
+            <summary>
+            The name of the generic parameter that this type came from.
+            </summary>
+        </member>
+        <member name="T:FullInspector.Internal.UnityInternalReflection">
+            <summary>
+            This class contains methods that do not use public Unity API. These are subject to
+            break/change per update.
+            </summary>
+        </member>
+        <member name="M:FullInspector.Internal.UnityInternalReflection.SetBoldDefaultFont(System.Boolean)">
+            <summary>
+            Attempts to enable/disable the bold font that is used by Unity when an object has a
+            value different from its prefab.
+            </summary>
+            <param name="enabled">True if the bold font is set, false if it is not.</param>
+        </member>
+    </members>
+</doc>
