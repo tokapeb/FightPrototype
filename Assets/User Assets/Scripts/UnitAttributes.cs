@@ -27,6 +27,15 @@ public class UnitAttributes : FullInspector.BaseBehavior {
 		}
 	};
 
+	public int AttributeCheck (PlayerAttribute attribute) {
+		int Success = 0;
+		for (int i = 0; i < attribute.Value; i++) {
+			if ((Random.Range(1, 11)) < 5 )
+				Success ++;
+		}
+		return Success;
+	}
+
 	public void DevelopAttribute(PlayerAttribute attribute) {
 		int Cost;
 		if (attribute.DevType == PlayerAttribute.PlayerAttributeDevType.Static) {
