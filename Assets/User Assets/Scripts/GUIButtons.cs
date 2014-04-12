@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GUIButtons : MonoBehaviour {
+public class GUIButtons : FullInspector.BaseBehavior {
 	private int MaxGold = 3;
 	private int PlayerGold;
 	private int EnemyGold;
@@ -50,12 +50,5 @@ public class GUIButtons : MonoBehaviour {
 			}
 
 		}
-
-		GUI.BeginGroup (new Rect (Screen.width / 2 -300, Screen.height - 220, 600, 200));
-		GUI.Box(new Rect(0, 0, 600, 200), "Selected Unit:");
-		//Debug.Log (GetComponent<GameMaster> ().ActivePlayerUnit.name);
-
-		//GUI.Label (new Rect (10, 20, 500, 20), ActivePlayerUnit.name);
-		GUI.EndGroup();
 	}
 }

@@ -1,18 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UnitAttributes : MonoBehaviour {
-
-	public int EStrength;
-	public int EAgility;
-	public int EHealth;
+public class UnitAttributes : FullInspector.BaseBehavior {
+	
 	public int Experience;
 	public string UnitType;
 	public PlayerAttribute Strength;
 	public PlayerAttribute Agility;
 	public PlayerAttribute Health;
-
-	[System.Serializable]
+	
 	public class PlayerAttribute {
 
 		public enum PlayerAttributeName { Strength, Agility, Health };
@@ -58,10 +54,6 @@ public class UnitAttributes : MonoBehaviour {
 
 			//Experience
 			Experience = 10;
-			//For inspector
-			EStrength = Strength.Value;
-			EAgility = Agility.Value;
-			EHealth = Health.Value;
 
 		} else {
 			//Main abilities
@@ -71,10 +63,6 @@ public class UnitAttributes : MonoBehaviour {
 			
 			//Experience
 			Experience = 0;
-			//For inspector
-			EStrength = Strength.Value;
-			EAgility = Agility.Value;
-			EHealth = Health.Value;
 		}
 	}
 

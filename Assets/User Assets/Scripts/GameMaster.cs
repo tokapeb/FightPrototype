@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameMaster : MonoBehaviour {
+public class GameMaster : FullInspector.BaseBehavior {
 
 	// Populate and Unit Management
 	public ArrayList PlayerUnits = new ArrayList();
@@ -90,8 +90,10 @@ public class GameMaster : MonoBehaviour {
 			Army.Add(CloneUnit);
 			ActiveEnemyUnit = CloneUnit;
 		}
+		SelectUnit (CloneUnit);
 	}
 
+	// Select Unit
 	public void SelectUnit(GameObject selected) {
 		if (selected.GetComponent<UnitAttributes> ().UnitType == "Player Unit") {
 			ActivePlayerUnit = selected;
