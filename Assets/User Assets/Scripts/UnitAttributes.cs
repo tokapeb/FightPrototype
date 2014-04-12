@@ -12,6 +12,7 @@ public class UnitAttributes : MonoBehaviour {
 	public PlayerAttribute Agility;
 	public PlayerAttribute Health;
 
+	[System.Serializable]
 	public class PlayerAttribute {
 
 		public enum PlayerAttributeName { Strength, Agility, Health };
@@ -78,20 +79,9 @@ public class UnitAttributes : MonoBehaviour {
 	}
 
 	void OnMouseDown() {
-				//Set Active Unit
+		//Set Active Unit
 		GameObject.Find("GameMaster").GetComponent<GameMaster>().SelectUnit (this.gameObject);
-		//Debug.Log (this.gameObject);
-//		if (this.UnitType == "Player Unit") {
-////			GameObject.Find("GameMaster").GetComponent<GameMaster>().ActivePlayerUnit = this.gameObject;
-////			Vector3 ObjPos = this.transform.position;
-////			GameObject.Find("UserSelector").transform.position = ObjPos;
-//		} else {
-////			GameObject.Find("GameMaster").GetComponent<GameMaster>().ActiveEnemyUnit = this.gameObject;
-////			Vector3 ObjPos = this.transform.position;
-////			GameObject.Find("EnemySelector").transform.position = ObjPos;
-//		}
-//	}
-		}
+	}
 	
 	// Update is called once per frame
 	void Update () {
