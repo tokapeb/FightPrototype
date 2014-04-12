@@ -50,5 +50,12 @@ public class GUIButtons : MonoBehaviour {
 			}
 
 		}
+
+		GUI.BeginGroup (new Rect (Screen.width / 2 -300, Screen.height - 220, 600, 200));
+		GUI.Box(new Rect(0, 0, 600, 200), "Selected Unit:");
+		//Debug.Log (GetComponent<GameMaster> ().ActivePlayerUnit.name);
+
+		//GUI.Label (new Rect (10, 20, 500, 20), ActivePlayerUnit.name);
+		GUI.EndGroup();
 	}
 }

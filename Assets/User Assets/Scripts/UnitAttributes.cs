@@ -3,36 +3,84 @@ using System.Collections;
 
 public class UnitAttributes : MonoBehaviour {
 
-	public int Strength;
-	public int Agility;
-	public int Health;
+	public int EStrength;
+	public int EAgility;
+	public int EHealth;
 	public int Experience;
 	public string UnitType;
+	public PlayerAttribute Strength;
+	public PlayerAttribute Agility;
+	public PlayerAttribute Health;
+
+	[System.Serializable]
+	public class PlayerAttribute {
+
+		public enum PlayerAttributeName { Strength, Agility, Health };
+		public enum PlayerAttributeDevType { Static, Dynamic, NAN };
+
+		public PlayerAttributeName Name;
+		public int Value;
+		public PlayerAttributeDevType DevType;
+		public int DevRate;
+
+		public PlayerAttribute (PlayerAttributeName Name, int Value, PlayerAttributeDevType DevType, int DevRate) {
+			this.Name = Name;
+			this.Value = Value;
+			this.DevType = DevType;
+			this.DevRate = DevRate;		
+		}
+	};
+
+	public void DevelopAttribute(PlayerAttribute attribute) {
+		int Cost;
+		if (attribute.DevType == PlayerAttribute.PlayerAttributeDevType.Static) {
+			Cost = attribute.DevRate;
+		} 
+		else {
+			Cost = attribute.Value * attribute.DevRate;
+		} 
+
+		if (Experience < Cost) {
+			Debug.Log("Not enough exp.");
+		} else {
+			attribute.Value ++;
+			Experience -= Cost;
+		}
+	}
 
 	// Use this for initialization
 	void Start () {
 		if (UnitType == "Player Unit") {
-			Strength = Agility = 1;
-			Health = 3;
+			//Main abilities
+			Strength = new PlayerAttribute (PlayerAttribute.PlayerAttributeName.Strength, 1, PlayerAttribute.PlayerAttributeDevType.Dynamic, 1);
+			Agility = new PlayerAttribute (PlayerAttribute.PlayerAttributeName.Agility, 1, PlayerAttribute.PlayerAttributeDevType.Dynamic, 1);
+			Health = new PlayerAttribute (PlayerAttribute.PlayerAttributeName.Health, 1, PlayerAttribute.PlayerAttributeDevType.Static, 1);
+
+			//Experience
 			Experience = 10;
+			//For inspector
+			EStrength = Strength.Value;
+			EAgility = Agility.Value;
+			EHealth = Health.Value;
+
 		} else {
-			Strength = Random.Range(1, 3);
-			Agility = Random.Range(1, 3);
-			Health = Random.Range(3, 6);
+			//Main abilities
+			Strength = new PlayerAttribute (PlayerAttribute.PlayerAttributeName.Strength, Random.Range(1, 4), PlayerAttribute.PlayerAttributeDevType.NAN, 1);
+			Agility = new PlayerAttribute (PlayerAttribute.PlayerAttributeName.Agility, Random.Range(1, 4), PlayerAttribute.PlayerAttributeDevType.NAN, 1);
+			Health = new PlayerAttribute (PlayerAttribute.PlayerAttributeName.Health, Random.Range(2, 7), PlayerAttribute.PlayerAttributeDevType.NAN, 1);
+			
+			//Experience
+			Experience = 0;
+			//For inspector
+			EStrength = Strength.Value;
+			EAgility = Agility.Value;
+			EHealth = Health.Value;
 		}
 	}
 
 	void OnMouseDown() {
 		//Set Active Unit
-		if (this.UnitType == "Player Unit") {
-			GameObject.Find("GameMaster").GetComponent<GameMaster>().ActivePlayerUnit = this.gameObject;
-			Vector3 ObjPos = this.transform.position;
-			GameObject.Find("UserSelector").transform.position = ObjPos;
-		} else {
-			GameObject.Find("GameMaster").GetComponent<GameMaster>().ActiveEnemyUnit = this.gameObject;
-			Vector3 ObjPos = this.transform.position;
-			GameObject.Find("EnemySelector").transform.position = ObjPos;
-		}
+		GameObject.Find("GameMaster").GetComponent<GameMaster>().SelectUnit (this.gameObject);
 	}
 	
 	// Update is called once per frame
