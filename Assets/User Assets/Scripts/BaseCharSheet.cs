@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using MessageController;
 
 public class BaseCharSheet : FullInspector.BaseBehavior {
 
 	public GameObject UnitToShow;
+	public GameObject UnitTarget;
 	public Texture2D AttackIcon;
 	public Texture2D SpellIcon;
-
+	
 	void OnGUI () {
 
 		UnitToShow = GetComponent<GameMaster> ().ActivePlayerUnit;
+		UnitTarget = GetComponent<GameMaster> ().ActiveEnemyUnit;
 		UnitAttributes UnitToShowAttributes = UnitToShow.GetComponent<UnitAttributes> ();
 
 		GUI.BeginGroup (new Rect (Screen.width / 2 -300, Screen.height - 220, 600, 200));
@@ -32,12 +35,28 @@ public class BaseCharSheet : FullInspector.BaseBehavior {
 
 		if (GUI.Button (new Rect (150, 40, 65, 65), AttackIcon)) {
 			//Debug.Log("Phis Attack");
-			for (int i = 0; i < 100; i++)
 			Debug.Log( UnitToShowAttributes.AttributeCheck(UnitToShowAttributes.Agility));
+			UnitToShow.animation.Play("attack");
 		}
 
 		if (GUI.Button (new Rect (225, 40, 65, 65), SpellIcon)) {
 			Debug.Log("Spell Attack");
+			MessageController.MessageController.BasicMessage("Maki");
+			float xpos = UnitTarget.transform.position.x;
+			float zpos = UnitTarget.transform.position.z;
+
+			iTween.MoveTo(UnitToShow, iTween.Hash(
+				"x",	xpos-0.3f,
+				"y",	0f,
+				"z",	zpos,
+				//"orienttopath",	true,
+				//"onstart", WalKanim(),
+//				"onstartparams", (string) str,
+				//"oncomplete",	MessageController.MessageController.BasicMessage,
+				//"oncompleteparams",	"Ended",
+				"time",	2f
+				)
+      		);
 		}
 
 		GUI.Label (new Rect (10, 120, 500, 25), "Experience: " + UnitToShowAttributes.Experience );
